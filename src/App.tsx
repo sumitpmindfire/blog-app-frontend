@@ -1,25 +1,13 @@
 import React from "react";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Signup from "pages/auth/Signup";
-import Login from "pages/auth/Login";
-
-const router = createBrowserRouter([
-  {
-    path: "/signup",
-    element: <Signup />,
-  },
-  {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "*",
-    element: <div>404</div>,
-  },
-]);
+import AuthContextProvider from "contexts/AuthContext";
+import AppRoutes from "Routes";
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <AuthContextProvider>
+      <AppRoutes />
+    </AuthContextProvider>
+  );
 }
 
 export default App;

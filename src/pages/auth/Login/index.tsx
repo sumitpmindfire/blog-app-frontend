@@ -1,4 +1,5 @@
-import React, { FormEventHandler } from "react";
+import React, { FormEventHandler, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Cookies from "js-cookie";
 import Box from "@mui/material/Box";
@@ -8,25 +9,31 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { apiPostLogin } from "services/userServices";
 import { LoginForm } from "services/types";
-import axios from "axios";
+import { useAuthContext } from "contexts/AuthContext";
 
 const Login = () => {
-  const { register, handleSubmit, reset } = useForm<LoginForm>();
+  const { register, handleSubmit } = useForm<LoginForm>();
+  const { setUserData, isLoggedIn } = useAuthContext();
+  const navigate = useNavigate();
 
   const handleFormSubmit: FormEventHandler = (e) => {
     e.preventDefault();
     handleSubmit(async (data) => {
       try {
         const response = await apiPostLogin(data);
-        reset();
         if (response) {
           Cookies.set("user", JSON.stringify(response.data), { expires: 7 });
+          setUserData(response.data);
         }
       } catch (error) {
         console.error(error);
       }
     })();
   };
+
+  useEffect(() => {
+    if (isLoggedIn) navigate("/blogs");
+  }, [isLoggedIn]);
 
   return (
     <Container

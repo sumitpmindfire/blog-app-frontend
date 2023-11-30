@@ -1,4 +1,4 @@
-import React, { FormEventHandler } from "react";
+import React, { FormEventHandler, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
@@ -8,10 +8,12 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { apiPostSignup } from "services/userServices";
 import { SignupForm } from "services/types";
+import { useAuthContext } from "contexts/AuthContext";
 
 const Signup = () => {
   const { register, handleSubmit } = useForm<SignupForm>();
   const navigate = useNavigate();
+  const { isLoggedIn } = useAuthContext();
 
   const handleFormSubmit: FormEventHandler = (e) => {
     e.preventDefault();
@@ -24,6 +26,10 @@ const Signup = () => {
       }
     })();
   };
+
+  useEffect(() => {
+    if (isLoggedIn) navigate("/blogs");
+  }, [isLoggedIn]);
 
   return (
     <Container
