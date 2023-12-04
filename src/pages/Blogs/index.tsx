@@ -149,7 +149,10 @@ const Blogs = () => {
                       {userData?.role === "ADMIN" && (
                         <Button
                           variant="text"
-                          onClick={() => handleDeleteBlog(blogDetails._id)}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleDeleteBlog(blogDetails._id);
+                          }}
                           sx={{
                             p: 0,
                           }}

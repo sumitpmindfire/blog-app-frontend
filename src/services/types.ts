@@ -8,4 +8,9 @@ interface LoginForm {
   password: string;
 }
 
-export type { SignupForm, LoginForm };
+interface CommentForm {
+  text: string;
+  blogId: string;
+}
+
+export type { SignupForm, LoginForm, CommentForm };

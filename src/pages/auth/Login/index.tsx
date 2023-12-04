@@ -1,4 +1,4 @@
-import React, { FormEventHandler, useEffect } from "react";
+import React, { FormEventHandler, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Cookies from "js-cookie";
@@ -13,6 +13,7 @@ import { useAuthContext } from "contexts/AuthContext";
 
 const Login = () => {
   const { register, handleSubmit } = useForm<LoginForm>();
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
   const { setUserData, isLoggedIn } = useAuthContext();
   const navigate = useNavigate();
 
@@ -20,6 +21,7 @@ const Login = () => {
     e.preventDefault();
     handleSubmit(async (data) => {
       try {
+        setIsLoggingIn(true);
         const response = await apiPostLogin(data);
         if (response) {
           Cookies.set("user", JSON.stringify(response.data), { expires: 7 });
@@ -27,6 +29,8 @@ const Login = () => {
         }
       } catch (error) {
         console.error(error);
+      } finally {
+        setIsLoggingIn(false);
       }
     })();
   };
@@ -66,7 +70,7 @@ const Login = () => {
           label="Password"
           size="small"
         />
-        <Button type="submit" variant="contained">
+        <Button type="submit" variant="contained" disabled={isLoggingIn}>
           Login
         </Button>
       </Box>
