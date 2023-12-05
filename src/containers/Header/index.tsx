@@ -38,7 +38,11 @@ const Header = () => {
       {routes.map(
         (routeData) =>
           routeData.visible && (
-            <NavLink to={routeData.href} end={routeData.end}>
+            <NavLink
+              to={routeData.href}
+              end={routeData.end}
+              key={routeData.href}
+            >
               {routeData.label}
             </NavLink>
           )

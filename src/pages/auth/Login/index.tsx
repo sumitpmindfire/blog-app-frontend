@@ -63,14 +63,21 @@ const Login = () => {
           type="text"
           label="Username"
           size="small"
+          data-testid="usernameField"
         />
         <TextField
           {...register("password")}
           type="password"
           label="Password"
           size="small"
+          data-testid="passwordField"
         />
-        <Button type="submit" variant="contained" disabled={isLoggingIn}>
+        <Button
+          type="submit"
+          variant="contained"
+          disabled={isLoggingIn}
+          data-testid="loginSubmitBtn"
+        >
           Login
         </Button>
       </Box>

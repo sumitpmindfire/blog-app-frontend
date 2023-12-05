@@ -109,7 +109,7 @@ const Blogs = () => {
       >
         {blogList.length
           ? blogList.map((blogDetails) => (
-              <Link to={`/blogs/${blogDetails._id}`}>
+              <Link to={`/blogs/${blogDetails._id}`} key={blogDetails._id}>
                 <Card
                   sx={{
                     boxShadow: 0.5,
