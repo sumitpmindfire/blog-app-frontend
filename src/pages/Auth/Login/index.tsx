@@ -37,7 +37,7 @@ const Login = () => {
 
   useEffect(() => {
     if (isLoggedIn) navigate("/blogs");
-  }, [isLoggedIn]);
+  }, [isLoggedIn, navigate]);
 
   return (
     <Container

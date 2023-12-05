@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Box,
   Card,
@@ -23,7 +23,7 @@ const Blogs = () => {
   const [blogList, setBlogList] = useState<Blog[]>([]);
   const [selectedCategory, setSelectedCategory] = useState("");
 
-  const fetchBlogs = async () => {
+  const fetchBlogs = useCallback(async () => {
     try {
       const response = await apiGetBlogs({
         params: { category: selectedCategory },
@@ -32,7 +32,7 @@ const Blogs = () => {
     } catch (error) {
       console.error(error);
     }
-  };
+  }, [selectedCategory]);
 
   const handleSelectCategory: SelectInputProps<any>["onChange"] = (e) => {
     setSelectedCategory(e.target.value);
@@ -49,7 +49,7 @@ const Blogs = () => {
 
   useEffect(() => {
     fetchBlogs();
-  }, [selectedCategory]);
+  }, [selectedCategory, fetchBlogs]);
 
   return (
     <Container maxWidth="md">

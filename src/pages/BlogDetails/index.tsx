@@ -1,4 +1,9 @@
-import React, { FormEventHandler, useEffect, useState } from "react";
+import React, {
+  FormEventHandler,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import {
@@ -28,7 +33,7 @@ const BlogDetails = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isAddingComment, setIsAddingComment] = useState(false);
 
-  const fetchBlogDetails = async () => {
+  const fetchBlogDetails = useCallback(async () => {
     try {
       if (blogId) {
         setIsLoading(true);
@@ -40,9 +45,9 @@ const BlogDetails = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [blogId]);
 
-  const fetchBlogComments = async () => {
+  const fetchBlogComments = useCallback(async () => {
     try {
       if (blogId) {
         const response = await apiGetComments(blogId);
@@ -51,18 +56,21 @@ const BlogDetails = () => {
     } catch (error) {
       console.error(error);
     }
-  };
+  }, [blogId]);
 
   const handleAddComment: FormEventHandler = (e) => {
     e.preventDefault();
     handleSubmit(async (data) => {
       if (blogId) {
         try {
+          setIsAddingComment(true);
           await apiPostAddComment(blogId, data);
           await fetchBlogComments();
           reset();
         } catch (error) {
           console.error(error);
+        } finally {
+          setIsAddingComment(false);
         }
       }
     })();
@@ -71,7 +79,7 @@ const BlogDetails = () => {
   useEffect(() => {
     fetchBlogDetails();
     fetchBlogComments();
-  }, [blogId]);
+  }, [blogId, fetchBlogDetails, fetchBlogComments]);
 
   if (isLoading) return <Box>Loading...</Box>;
 
