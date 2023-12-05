@@ -8,6 +8,7 @@ import BlogDetails from "pages/BlogDetails";
 import CreateBlog from "pages/Blogs/CreateBlog";
 import { useAuthContext } from "contexts/AuthContext";
 import { setupAxiosInterceptor } from "services/networkService";
+
 import ProtectedRoutes from "./ProtectedRoutes";
 import AdminRoutes from "./AdminRoutes";
 
