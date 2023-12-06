@@ -27,7 +27,7 @@ export default defineConfig({
         },
       });
     },
-    baseUrl: "http://localhost:5000",
+    baseUrl: "https://blog-app-express.onrender.com",
     reporter: "junit",
     reporterOptions: {
       mochaFile: "results/test-output-[hash].xml",
