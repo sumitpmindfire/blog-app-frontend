@@ -8,6 +8,8 @@ export default defineConfig({
     },
   },
 
+  projectId: "1czkvj",
+
   e2e: {
     setupNodeEvents(on, config) {
       on("task", {
@@ -25,6 +27,11 @@ export default defineConfig({
         },
       });
     },
-    baseUrl: "https://blog-app-express.onrender.com",
+    baseUrl: "http://localhost:5000",
+    reporter: "junit",
+    reporterOptions: {
+      mochaFile: "results/test-output-[hash].xml",
+    },
   },
+  video: true,
 });
