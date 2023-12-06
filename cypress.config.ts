@@ -25,6 +25,6 @@ export default defineConfig({
         },
       });
     },
-    baseUrl: process.env.REACT_APP_API_URL,
+    baseUrl: "https://blog-app-express.onrender.com",
   },
 });

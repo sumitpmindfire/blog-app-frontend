@@ -41,7 +41,7 @@ declare global {
 Cypress.Commands.add("login", () => {
   cy.request({
     method: "POST",
-    url: "http://localhost:3000/login",
+    url: `https://blog-app-express.onrender.com/login`,
     body: {
       username: credentials.username,
       password: credentials.password,
