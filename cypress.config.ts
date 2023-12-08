@@ -22,7 +22,6 @@ export default defineConfig({
           return null;
         },
         getStore: () => {
-          console.log("global.store", global.store);
           return global.store;
         },
       });
@@ -31,6 +30,9 @@ export default defineConfig({
     reporter: "junit",
     reporterOptions: {
       mochaFile: "results/test-output-[hash].xml",
+    },
+    retries: {
+      openMode: 2,
     },
   },
   video: true,

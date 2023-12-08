@@ -98,7 +98,6 @@ describe("blog API tests", () => {
       },
     }).then((response) => {
       cy.wrap(response).its("status").should("eq", 201);
-      console.log("response", response);
       const newBlogId = { newBlogId: response.body.newBlog._id };
       cy.task("setStore", newBlogId);
     });

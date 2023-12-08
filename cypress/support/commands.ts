@@ -38,17 +38,19 @@ declare global {
   }
 }
 
-Cypress.Commands.add("login", () => {
-  cy.request({
-    method: "POST",
-    url: `https://blog-app-express.onrender.com/login`,
-    body: {
+beforeEach(() => {
+  cy.session(["userSession"], () => {
+    cy.request("POST", "/login", {
       username: credentials.username,
       password: credentials.password,
-    },
-  }).then((resp) => {
-    const user = resp.body;
-    4;
-    Cypress.env("user", user);
+    }).then((resp) => {
+      const user = resp.body;
+      Cypress.env("user", user);
+      cy.setCookie("user", JSON.stringify(user));
+      cy.intercept(`https://blog-app-express.onrender.com/*`, (req) => {
+        req.headers["Authorization"] = `Bearer ${user.accessToken}`;
+        req.continue();
+      });
+    });
   });
 });
