@@ -180,6 +180,7 @@ const Blogs = () => {
       </Box>
 
       <iframe
+        title="jsonplaceholder page"
         src="https://jsonplaceholder.typicode.com/?ref=cypress-io.ghost.io"
         data-testid="iframe"
         style={{ height: "100%", width: "100%" }}
