@@ -2,6 +2,7 @@ import loginPage from "../pages/login";
 
 describe("auth", () => {
   beforeEach(() => {
+    cy.clearCookies();
     cy.intercept({
       method: "POST",
       url: "/login",
@@ -16,9 +17,7 @@ describe("auth", () => {
     });
   });
 
-  it("logs in", () => {});
-
-  it("logs out on 403", () => {
+  it("logs out on 401", () => {
     cy.intercept(
       {
         method: "GET",

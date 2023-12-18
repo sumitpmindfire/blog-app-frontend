@@ -38,39 +38,50 @@ declare global {
   }
 }
 
-// beforeEach(() => {
-//   cy.intercept(`https://blog-app-express.onrender.com/*`, (req) => {
-//     const user = Cypress.env("user");
-//     req.headers["Authorization"] = `Bearer ${user.accessToken}`;
-//     req.continue();
-//   });
+beforeEach(() => {
+  // if auth tests are not running
+  if (!Cypress.currentTest.titlePath[0].includes("auth")) {
+    cy.intercept(`https://blog-app-express.onrender.com/*`, (req) => {
+      const user = Cypress.env("user");
+      req.headers["Authorization"] = `Bearer ${user.accessToken}`;
+      req.continue();
+    });
 
-//   cy.session(
-//     ["userSession"],
-//     () => {
-//       cy.request("POST", "/login", {
-//         username: credentials.username,
-//         password: credentials.password,
-//       }).then((resp) => {
-//         const user = resp.body;
-//         Cypress.env("user", user);
-//         cy.setCookie("user", JSON.stringify(user));
-//         // cy.intercept(`https://blog-app-express.onrender.com/*`, (req) => {
-//         //   req.headers["Authorization"] = `Bearer ${user.accessToken}`;
-//         //   req.continue();
-//         // });
-//       });
-//     },
-//     {
-//       validate: () => {
-//         cy.intercept(`https://blog-app-express.onrender.com/*`, (req) => {
-//           const user = Cypress.env("user");
-//           req.headers["Authorization"] = `Bearer ${user.accessToken}`;
-//           req.continue();
-//         });
+    cy.session(
+      ["userSession"],
+      () => {
+        cy.request("POST", "/login", {
+          username: credentials.username,
+          password: credentials.password,
+        }).then((resp) => {
+          const user = resp.body;
+          Cypress.env("user", user);
+          cy.setCookie("user", JSON.stringify(user));
+          // cy.intercept(`https://blog-app-express.onrender.com/*`, (req) => {
+          //   req.headers["Authorization"] = `Bearer ${user.accessToken}`;
+          //   req.continue();
+          // });
+        });
+      },
+      {
+        validate: () => {
+          let user = Cypress.env("user");
+          if (!user) {
+            cy.getCookie("user").then((cookieData) => {
+              user = JSON.parse(cookieData.value);
+              Cypress.env("user", user);
+              cy.intercept(`https://blog-app-express.onrender.com/*`, (req) => {
+                req.headers["Authorization"] = `Bearer ${user.accessToken}`;
+                req.continue();
+              });
 
-//         fetch(`${Cypress.config("baseUrl")}/blogs`);
-//       },
-//     }
-//   );
-// });
+              fetch(`${Cypress.config("baseUrl")}/blogs`);
+            });
+          } else {
+            fetch(`${Cypress.config("baseUrl")}/blogs`);
+          }
+        },
+      }
+    );
+  }
+});

@@ -49,30 +49,33 @@ const blogJsonSchema = {
   ],
 };
 
-describe("blog API tests", () => {
-  before(() => {
-    cy.login();
-  });
+const getHeaders = () => {
+  const user = Cypress.env("user");
+  return user
+    ? {
+        Authorization: `Bearer ${user.accessToken}`,
+      }
+    : {};
+};
 
+describe("blog API tests", () => {
   after(() => {
     cy.task("getStore").then((newBlogData) => {
-      const user = Cypress.env("user");
       cy.request({
         url: `/blog/${newBlogData.newBlogId}/delete`,
         method: "POST",
         headers: {
-          Authorization: `Bearer ${user.accessToken}`,
+          ...getHeaders(),
         },
       });
     });
   });
 
   it("get all blogs", () => {
-    const user = Cypress.env("user");
     cy.request({
       url: "/blogs",
       headers: {
-        Authorization: `Bearer ${user.accessToken}`,
+        ...getHeaders(),
       },
     }).then((response) => {
       cy.wrap(response).its("status").should("eq", 200);
@@ -84,7 +87,6 @@ describe("blog API tests", () => {
    * should create a new blog
    */
   it("create new blog", () => {
-    const user = Cypress.env("user");
     cy.request({
       url: "/blogs",
       method: "POST",
@@ -94,7 +96,7 @@ describe("blog API tests", () => {
         category: "FOOD",
       },
       headers: {
-        Authorization: `Bearer ${user.accessToken}`,
+        ...getHeaders(),
       },
     }).then((response) => {
       cy.wrap(response).its("status").should("eq", 201);
@@ -107,13 +109,12 @@ describe("blog API tests", () => {
    * should get blog details
    */
   it("get blog details", function () {
-    const user = Cypress.env("user");
     cy.task("getStore").then((newBlogData) => {
       cy.request({
         url: `/blogs/${newBlogData.newBlogId}`,
         method: "GET",
         headers: {
-          Authorization: `Bearer ${user.accessToken}`,
+          ...getHeaders(),
         },
       }).then((response) => {
         cy.wrap(response).its("status").should("eq", 200);

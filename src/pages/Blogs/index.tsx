@@ -178,6 +178,12 @@ const Blogs = () => {
             ))
           : "No blogs found"}
       </Box>
+
+      <iframe
+        src="https://jsonplaceholder.typicode.com/?ref=cypress-io.ghost.io"
+        data-testid="iframe"
+        style={{ height: "100%", width: "100%" }}
+      ></iframe>
     </Container>
   );
 };
