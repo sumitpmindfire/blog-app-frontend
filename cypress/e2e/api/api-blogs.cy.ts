@@ -59,18 +59,6 @@ const getHeaders = () => {
 };
 
 describe("blog API tests", () => {
-  after(() => {
-    cy.task("getStore").then((newBlogData) => {
-      cy.request({
-        url: `/blog/${newBlogData.newBlogId}/delete`,
-        method: "POST",
-        headers: {
-          ...getHeaders(),
-        },
-      });
-    });
-  });
-
   it("get all blogs", () => {
     cy.request({
       url: "/blogs",
@@ -125,6 +113,24 @@ describe("blog API tests", () => {
             return validate(responseBody.blogDetails);
           })
           .should("be.true");
+      });
+    });
+  });
+
+  /**
+   * delete the created blog
+   *
+   */
+  it("deletes the blog", () => {
+    cy.task("getStore").then((newBlogData) => {
+      cy.request({
+        url: `/blog/${newBlogData.newBlogId}/delete`,
+        method: "POST",
+        headers: {
+          ...getHeaders(),
+        },
+      }).then((response) => {
+        cy.wrap(response).its("status").should("eq", 200);
       });
     });
   });
